@@ -6,6 +6,8 @@ output: html_document
 ```{r canada}
   library(leaflet)
   library(rgdal)
+  library(htmltools)
+
   
   
   # Map
