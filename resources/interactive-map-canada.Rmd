@@ -6,7 +6,6 @@ output: html_document
 ```{r canada}
 library(data.table)
   library(dplyr)
-  library(tidyr)
   library(leaflet)
   library(rgdal)
     
@@ -46,7 +45,7 @@ print(glimpse(df))
   lineColor <- "#000000"
   hoverColor <- "red"
   lineWeight <- 0.5
-  pal <- colorNumeric(rev("Reds"), c(max(df$AVG_VALUE), min(df$AVG_VALUE)))
+  pal <- colorNumeric(palette = 'Reds', c(max(df$AVG_VALUE), min(df$AVG_VALUE)), reverse = TRUE)
 
 provinces2 %>% 
 leaflet() %>% 
@@ -61,18 +60,17 @@ leaflet() %>%
                 stroke = TRUE,
                 weight = lineWeight,
                 color = lineColor,
-                highlightOptions = highlightOptions(fillOpacity = 0.8, bringToFront = TRUE, sendToBack = TRUE),
-                popup = "idk") %>%
+                highlightOptions = highlightOptions(fillOpacity = 1, bringToFront = TRUE, sendToBack = TRUE),
+                label=~stringr::str_c(
+                name,' ',
+                formatC(AVG_VALUE)),
+              labelOptions= labelOptions(direction = 'auto')) %>%
   # Add the checklist
-    addLayersControl(overlayGroups = c('Female',
-                        'Male'),
-                        options = layersControlOptions(collapsed = FALSE),
-                        position = 'topright') %>%
     addLegend(pal = pal, 
-                  values = df$AVG_VALUE, 
+                  values = df$AVG_VALUE,
                   position = "bottomleft", 
                   title = "Life Expectancy",
-                  labFormat = labelFormat(suffix = ""))
+                  labFormat = labelFormat(suffix = " Years"))
 
   
 
